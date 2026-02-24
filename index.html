@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Королевская Академия Алексии</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#fff5e6,#fde6f2);
+    overflow-x:hidden;
+}
+
+h1,h2,h3{
+    margin:0;
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:bold;
+    background:linear-gradient(45deg,#d4af37,#f7e27c);
+    box-shadow:0 0 15px rgba(212,175,55,0.6);
+    transition:0.3s;
+}
+button:hover{
+    transform:scale(1.05);
+}
+
+.screen{
+    display:none;
+    padding:20px;
+    text-align:center;
+}
+
+.active{
+    display:block;
+}
+
+input{
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-top:10px;
+}
+
+.progress-container{
+    width:80%;
+    margin:15px auto;
+    background:#eee;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:20px;
+    width:0%;
+    background:linear-gradient(90deg,#d4af37,#ffd700);
+    transition:0.4s;
+}
+
+.medals{
+    margin-top:15px;
+    font-size:24px;
+}
+
+.subject-card{
+    background:white;
+    padding:20px;
+    margin:15px auto;
+    border-radius:20px;
+    max-width:400px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.hero{
+    padding:60px 20px;
+    background:linear-gradient(to bottom,#ffdf9e,#ffc6f5);
+    color:#7a5c00;
+}
+
+.small{
+    font-size:14px;
+    opacity:0.7;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="screen active" id="login">
+    <div class="hero">
+        <h1>👑 Королевская Академия Алексии</h1>
+        <p>Добро пожаловать в магический мир знаний</p>
+    </div>
+    <input type="password" id="password" placeholder="Введите пароль">
+    <br>
+    <button onclick="checkLogin()">Войти</button>
+    <p id="loginMessage"></p>
+</div>
+
+<!-- MAIN MENU -->
+<div class="screen" id="menu">
+    <h2>Принцесса Алексия 👑</h2>
+    <p>Баллы: <span id="points">0</span></p>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="medals" id="medals"></div>
+
+    <div class="subject-card">
+        <h3>📘 Русский язык</h3>
+        <button onclick="openSubject('russian')">Открыть</button>
+    </div>
+
+    <div class="subject-card">
+        <h3>📗 Математика</h3>
+        <button onclick="openSubject('math')">Открыть</button>
+    </div>
+
+    <div class="subject-card">
+        <h3>📕 Английский</h3>
+        <button onclick="openSubject('english')">Открыть</button>
+    </div>
+</div>
+
+<!-- SUBJECT SCREEN -->
+<div class="screen" id="subjectScreen">
+    <h2 id="subjectTitle"></h2>
+    <p id="question"></p>
+    <input type="text" id="answer">
+    <br>
+    <button onclick="checkAnswer()">Ответить</button>
+    <br><br>
+    <button onclick="backToMenu()">Назад</button>
+</div>
+
+<script>
+let totalPoints = 0;
+let currentAnswer = "";
+let completed = 0;
+
+function checkLogin(){
+    if(document.getElementById("password").value === "121017"){
+        document.getElementById("login").classList.remove("active");
+        document.getElementById("menu").classList.add("active");
+    } else {
+        document.getElementById("loginMessage").innerText="Неверный пароль";
+    }
+}
+
+function openSubject(subject){
+    document.getElementById("menu").classList.remove("active");
+    document.getElementById("subjectScreen").classList.add("active");
+
+    if(subject === "russian"){
+        document.getElementById("subjectTitle").innerText="Русский язык";
+        document.getElementById("question").innerText="Сколько слогов в слове 'машина'?";
+        currentAnswer = "3";
+    }
+
+    if(subject === "math"){
+        document.getElementById("subjectTitle").innerText="Математика";
+        document.getElementById("question").innerText="В машине 7 мест. 3 заняты. Сколько свободных?";
+        currentAnswer = "4";
+    }
+
+    if(subject === "english"){
+        document.getElementById("subjectTitle").innerText="Английский";
+        document.getElementById("question").innerText="Переведи слово 'Brother'";
+        currentAnswer = "брат";
+    }
+}
+
+function checkAnswer(){
+    let userAnswer = document.getElementById("answer").value.toLowerCase();
+
+    if(userAnswer == currentAnswer){
+        totalPoints += 10;
+        completed++;
+        updateProgress();
+        alert("Верно 👑");
+    } else {
+        alert("Попробуй ещё");
+    }
+
+    document.getElementById("answer").value="";
+}
+
+function updateProgress(){
+    document.getElementById("points").innerText = totalPoints;
+
+    let percent = completed * 33;
+    document.getElementById("progressBar").style.width = percent + "%";
+
+    if(totalPoints >= 10){
+        document.getElementById("medals").innerText="🏅";
+    }
+    if(totalPoints >= 20){
+        document.getElementById("medals").innerText="🏅🏅";
+    }
+    if(totalPoints >= 30){
+        document.getElementById("medals").innerText="🏅🏅🏅";
+    }
+}
+
+function backToMenu(){
+    document.getElementById("subjectScreen").classList.remove("active");
+    document.getElementById("menu").classList.add("active");
+}
+</script>
+
+</body>
+</html>

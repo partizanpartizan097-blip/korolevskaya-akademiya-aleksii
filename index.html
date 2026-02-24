@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Королевская Академия</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif;}
+
+body{
+background:linear-gradient(180deg,#e6f4ff,#ffe5b4);
+height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+header{
+background:white;
+padding:15px 25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.logo{
+font-weight:700;
+font-size:20px;
+}
+
+.stats{
+font-size:14px;
+}
+
+main{
+flex:1;
+padding:30px;
+overflow:auto;
+}
+
+.screen{
+display:none;
+animation:fade .3s ease;
+}
+
+.active{
+display:block;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:25px;
+}
+
+.card{
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+cursor:pointer;
+transition:.2s;
+text-align:center;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card-icon{
+font-size:50px;
+margin-bottom:15px;
+}
+
+.button{
+background:linear-gradient(45deg,#ffd700,#ffb700);
+border:none;
+padding:10px 18px;
+border-radius:20px;
+cursor:pointer;
+margin-top:15px;
+}
+
+.task-box{
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+max-width:500px;
+margin:auto;
+text-align:center;
+}
+
+input{
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+margin-top:15px;
+width:100%;
+}
+
+.progress{
+height:8px;
+background:#eee;
+border-radius:10px;
+margin-top:10px;
+overflow:hidden;
+}
+
+.progress-bar{
+height:100%;
+background:gold;
+width:0%;
+transition:.3s;
+}
+
+.illustration{
+font-size:60px;
+margin-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">👑 Академия Алексии</div>
+<div class="stats">
+XP: <span id="xp">0</span> |
+Уровень: <span id="level">1</span>
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+</div>
+</header>
+
+<main>
+
+<!-- Главная -->
+<div id="home" class="screen active">
+<h2>Выбери тему</h2>
+<br>
+<div class="grid">
+<div class="card" onclick="openTheme('russian')">
+<div class="card-icon">📘</div>
+Русский язык
+</div>
+<div class="card" onclick="openTheme('math')">
+<div class="card-icon">📗</div>
+Математика
+</div>
+<div class="card" onclick="openTheme('english')">
+<div class="card-icon">🚗</div>
+Английский
+</div>
+<div class="card" onclick="openTheme('emotion')">
+<div class="card-icon">💛</div>
+Эмоциональный интеллект
+</div>
+<div class="card" onclick="openTheme('care')">
+<div class="card-icon">👶</div>
+Забота и доброта
+</div>
+</div>
+</div>
+
+<!-- Экран темы -->
+<div id="theme" class="screen">
+<h2 id="themeTitle"></h2>
+<br>
+<div id="lessonList" class="grid"></div>
+<br>
+<button class="button" onclick="goHome()">Назад</button>
+</div>
+
+<!-- Экран задания -->
+<div id="taskScreen" class="screen">
+<div class="task-box">
+<div class="illustration" id="illustration"></div>
+<h3 id="taskQuestion"></h3>
+<input id="taskAnswer" placeholder="Введите ответ">
+<button class="button" onclick="checkAnswer()">Ответить</button>
+<p id="feedback"></p>
+<button class="button" onclick="backToTheme()">Назад к теме</button>
+</div>
+</div>
+
+</main>
+
+<script>
+let xp = localStorage.getItem("xp8") ? parseInt(localStorage.getItem("xp8")) : 0;
+let level = Math.floor(xp/50)+1;
+let currentTheme = "";
+let currentAnswer = "";
+
+const themes = {
+russian:{
+title:"Русский язык",
+icon:"📘",
+lessons:[
+{q:"Сколько слогов в слове 'Василиса'?",a:"4",i:"📖"},
+{q:"Какая первая буква в слове 'Алексия'?",a:"а",i:"✏️"}
+]
+},
+math:{
+title:"Математика",
+icon:"📗",
+lessons:[
+{q:"16 - 6 = ?",a:"10",i:"➗"},
+{q:"5 + 7 = ?",a:"12",i:"➕"}
+]
+},
+english:{
+title:"Английский",
+icon:"🚗",
+lessons:[
+{q:"Brother — это?",a:"брат",i:"🇬🇧"},
+{q:"Car — это?",a:"машина",i:"🚘"}
+]
+},
+emotion:{
+title:"Эмоции",
+icon:"💛",
+lessons:[
+{q:"Если Иван грустит — что сделать?",a:"поддержать",i:"🤝"}
+]
+},
+care:{
+title:"Забота",
+icon:"👶",
+lessons:[
+{q:"Как помочь малышу?",a:"обнять",i:"🧸"}
+]
+}
+};
+
+function updateStats(){
+document.getElementById("xp").innerText=xp;
+document.getElementById("level").innerText=level;
+document.getElementById("progressBar").style.width=(xp%50)*2+"%";
+localStorage.setItem("xp8",xp);
+}
+
+function openTheme(key){
+currentTheme = key;
+switchScreen("theme");
+document.getElementById("themeTitle").innerText = themes[key].title;
+
+let list = document.getElementById("lessonList");
+list.innerHTML = "";
+
+themes[key].lessons.forEach((lesson,index)=>{
+let div = document.createElement("div");
+div.className="card";
+div.innerHTML=`<div class="card-icon">${lesson.i}</div>Урок ${index+1}`;
+div.onclick=()=>openTask(index);
+list.appendChild(div);
+});
+}
+
+function openTask(index){
+let lesson = themes[currentTheme].lessons[index];
+currentAnswer = lesson.a;
+switchScreen("taskScreen");
+document.getElementById("taskQuestion").innerText=lesson.q;
+document.getElementById("illustration").innerText=lesson.i;
+document.getElementById("feedback").innerText="";
+}
+
+function checkAnswer(){
+let ans=document.getElementById("taskAnswer").value.toLowerCase().trim();
+if(ans===currentAnswer){
+xp+=10;
+level=Math.floor(xp/50)+1;
+document.getElementById("feedback").innerText="Правильно 👑 +10 XP";
+updateStats();
+}else{
+document.getElementById("feedback").innerText="Попробуй ещё 💛";
+}
+document.getElementById("taskAnswer").value="";
+}
+
+function backToTheme(){
+switchScreen("theme");
+}
+
+function goHome(){
+switchScreen("home");
+}
+
+function switchScreen(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+updateStats();
+</script>
+
+</body>
+</html>

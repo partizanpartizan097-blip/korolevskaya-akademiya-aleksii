@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Королевская Академия — Учебный портал</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{
+background:linear-gradient(#eef6ff,#fff4e6);
+height:100vh;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+header{
+height:80px;
+background:white;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 40px;
+box-shadow:0 4px 15px rgba(0,0,0,.07);
+}
+
+.logo{font-size:22px;font-weight:700}
+
+#app{
+flex:1;
+display:flex;
+overflow:hidden;
+}
+
+.sidebar{
+width:260px;
+background:white;
+padding:25px;
+border-right:1px solid #eee;
+overflow-y:auto;
+}
+
+.subject{
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+margin-bottom:8px;
+}
+
+.subject:hover{background:#f0f6ff}
+.subject.active{background:#e0edff;font-weight:600}
+
+.main{
+flex:1;
+padding:40px;
+overflow-y:auto;
+}
+
+.lesson-card{
+background:white;
+border-radius:25px;
+padding:35px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+max-width:900px;
+}
+
+.section{
+margin-top:25px;
+}
+
+.section h3{
+margin-bottom:10px;
+color:#444;
+}
+
+.illustration{
+margin-top:15px;
+padding:20px;
+background:#f9fbff;
+border-radius:15px;
+text-align:center;
+}
+
+textarea{
+width:100%;
+padding:10px;
+border-radius:12px;
+border:1px solid #ccc;
+margin-top:10px;
+}
+
+button{
+margin-top:15px;
+padding:10px 20px;
+border:none;
+border-radius:20px;
+background:linear-gradient(45deg,#ffd700,#ffb700);
+cursor:pointer;
+font-weight:600;
+}
+
+.test-block{
+margin-top:30px;
+padding:20px;
+background:#fff8e1;
+border-radius:15px;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">👑 Королевская Академия</div>
+</header>
+
+<div id="app">
+<div class="sidebar" id="sidebar"></div>
+<div class="main" id="main"></div>
+</div>
+
+<script>
+
+/* ================= COURSE STRUCTURE ================= */
+
+const course={
+"Русский язык":[
+{
+title:"Месяц 1 — Имя существительное",
+lesson:`
+<div class="lesson-card">
+<h2>Имя существительное</h2>
+
+<div class="section">
+<h3>📖 Объяснение</h3>
+<p>Имя существительное отвечает на вопросы <b>кто?</b> или <b>что?</b>.
+Это слова, которые называют предметы, людей и явления.</p>
+</div>
+
+<div class="section">
+<h3>🏠 Пример из жизни Алексии</h3>
+<p>Алексия живёт на 16 этаже. В её комнате есть кровать, коврик с дорогами, игрушки и окно с видом на город.</p>
+<p>Слова <b>этаж, коврик, игрушки, окно, город</b> — это существительные.</p>
+</div>
+
+<div class="illustration">
+<svg width="250" height="160">
+<rect x="40" y="20" width="170" height="120" fill="#cfe8ff"/>
+<rect x="80" y="50" width="40" height="40" fill="#fff"/>
+<rect x="140" y="50" width="40" height="40" fill="#fff"/>
+<text x="70" y="15" font-size="14">16 этаж</text>
+</svg>
+</div>
+
+<div class="section">
+<h3>✍ Практика</h3>
+<p>Напиши 5 существительных из детской комнаты Алексии:</p>
+<textarea></textarea>
+</div>
+
+<div class="test-block">
+<h3>📝 Мини-контрольная</h3>
+<p>Выбери существительные:</p>
+<ul>
+<li>Бегать</li>
+<li>Машина</li>
+<li>Красивый</li>
+<li>Брат</li>
+</ul>
+<p>Напиши правильные ответы:</p>
+<textarea></textarea>
+</div>
+
+</div>
+`
+}
+],
+
+"Математика":[
+{
+title:"Месяц 1 — Задачи на движение",
+lesson:`
+<div class="lesson-card">
+<h2>Задачи на движение</h2>
+
+<div class="section">
+<h3>📖 Теория</h3>
+<p>Чтобы найти расстояние, нужно скорость умножить на время.</p>
+<p><b>Формула:</b> S = V × T</p>
+</div>
+
+<div class="section">
+<h3>🚗 Пример из жизни</h3>
+<p>Семейная машина летит со скоростью 90 км/ч 2 часа.</p>
+<p>90 × 2 = 180 км</p>
+</div>
+
+<div class="illustration">
+<svg width="300" height="100">
+<rect x="20" y="40" width="120" height="40" rx="20" fill="#ff4d4d"/>
+<circle cx="50" cy="80" r="10" fill="black"/>
+<circle cx="110" cy="80" r="10" fill="black"/>
+</svg>
+</div>
+
+<div class="section">
+<h3>✍ Практика</h3>
+<p>Если машина летит 80 км/ч 3 часа, сколько км она пролетит?</p>
+<textarea></textarea>
+</div>
+
+<div class="test-block">
+<h3>📝 Контрольная</h3>
+<p>1. 60 км/ч × 4 часа = ?</p>
+<p>2. 75 км/ч × 2 часа = ?</p>
+<textarea></textarea>
+</div>
+
+</div>
+`
+}
+],
+
+"Эмоциональный интеллект":[
+{
+title:"Понимание чувств",
+lesson:`
+<div class="lesson-card">
+<h2>Если Иван расстроен</h2>
+
+<div class="section">
+<h3>📖 Теория</h3>
+<p>Когда человек грустит, важно не смеяться, а поддержать.</p>
+</div>
+
+<div class="section">
+<h3>👦 Пример</h3>
+<p>Иван проиграл в игре и расстроился. Алексия может сказать:
+"Я понимаю, тебе обидно. Хочешь, сыграем ещё раз?"</p>
+</div>
+
+<div class="section">
+<h3>✍ Практика</h3>
+<p>Напиши 2 фразы поддержки:</p>
+<textarea></textarea>
+</div>
+
+<div class="test-block">
+<h3>📝 Контрольная</h3>
+<p>Что нельзя делать, если друг грустит?</p>
+<textarea></textarea>
+</div>
+
+</div>
+`
+}
+]
+
+};
+
+/* ================= RENDER ================= */
+
+function renderSubjects(){
+const sidebar=document.getElementById("sidebar");
+sidebar.innerHTML="";
+Object.keys(course).forEach(subject=>{
+const div=document.createElement("div");
+div.className="subject";
+div.innerText=subject;
+div.onclick=()=>{
+document.querySelectorAll(".subject").forEach(s=>s.classList.remove("active"));
+div.classList.add("active");
+renderLesson(subject);
+};
+sidebar.appendChild(div);
+});
+}
+
+function renderLesson(subject){
+const main=document.getElementById("main");
+main.innerHTML=course[subject][0].lesson;
+}
+
+renderSubjects();
+
+</script>
+
+</body>
+</html>

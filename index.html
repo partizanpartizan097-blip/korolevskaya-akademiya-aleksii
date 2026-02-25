@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Королевская Академия Алексии</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <aside class="sidebar">
+    <div>
+      <div class="logo">👑 Академия Алексии</div>
+
+      <div class="month-select">
+        <select id="monthSelect"></select>
+      </div>
+
+      <div id="subjects"></div>
+    </div>
+
+    <div class="profile-card">
+      <div>Уровень: <span id="level">1</span></div>
+      <div class="xp-bar">
+        <div id="xpFill"></div>
+      </div>
+      <div id="medals"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div id="content"></div>
+  </main>
+
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-content" id="modalContent"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
